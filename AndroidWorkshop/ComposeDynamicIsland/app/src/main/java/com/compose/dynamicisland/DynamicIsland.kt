@@ -3,6 +3,8 @@ package com.compose.dynamicisland
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.Image
@@ -14,7 +16,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.LinearProgressIndicator
@@ -33,8 +34,8 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -57,7 +58,12 @@ fun DynamicIsland(state: IslandType, modifier: Modifier = Modifier) {
         modifier
             .clip(RoundedCornerShape(30.dp))
             .background(Color.Black) //important
-            .animateContentSize(tween(AnimationDuration))
+            .animateContentSize(
+                animationSpec = spring(
+                    dampingRatio = 0.6f,
+                    stiffness = Spring.StiffnessLow
+                )
+            )
     ) {
         if (state == IslandType.Small) InitialIsland()
         else MediaPlayer(state.size, state != IslandType.Medium)
@@ -88,7 +94,7 @@ private fun MediaPlayer(size: DpSize, expended: Boolean = false) {
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Image(
-                    ImageVector.vectorResource(id = R.drawable.ic_launcher_background),
+                    painterResource(id = R.drawable.ic_launcher_background),
                     "music cover",
                     Modifier
                         .size(animationData.musicImageSize)
@@ -100,7 +106,12 @@ private fun MediaPlayer(size: DpSize, expended: Boolean = false) {
                         .fillMaxWidth(0.6f)
                         .alpha(animationData.musicNameAlpha)
                 ) {
-                    Text("Entropy", color = Color.White, fontSize = 25.sp)
+                    Text(
+                        "Entropy",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 25.sp
+                    )
                     Text("Beach Bunny", color = Color.Gray, fontSize = 20.sp)
                 }
 

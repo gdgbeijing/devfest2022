@@ -90,7 +90,7 @@ fun updateTransitionData(expended: Boolean): AnimationData {
         initialValue = if (expended) 1.1f else 1f,
         targetValue = if (expended) 0.5f else 1f,
         animationSpec = InfiniteRepeatableSpec(
-            animation = tween(if (expended) 500 else 3000),
+            animation = tween(500),
             repeatMode = RepeatMode.Reverse
         )
     )
