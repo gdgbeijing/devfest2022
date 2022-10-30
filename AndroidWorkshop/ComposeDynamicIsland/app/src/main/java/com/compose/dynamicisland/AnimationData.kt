@@ -1,6 +1,5 @@
 import androidx.compose.animation.core.AnimationVector2D
 import androidx.compose.animation.core.FiniteAnimationSpec
-import androidx.compose.animation.core.InfiniteRepeatableSpec
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.Transition
@@ -8,11 +7,13 @@ import androidx.compose.animation.core.TwoWayConverter
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateValue
+import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.Dp
@@ -32,7 +33,7 @@ private inline fun <S> Transition<S>.animateDpSize(
     animateValue(DpSizeToVector, transitionSpec, label, targetValueByState)
 
 
-val DpSizeToVector: TwoWayConverter<DpSize, AnimationVector2D> =
+private val DpSizeToVector: TwoWayConverter<DpSize, AnimationVector2D> =
     TwoWayConverter(
         { AnimationVector2D(it.width.value, it.height.value) },
         { DpSize(it.v1.dp, it.v2.dp) }
@@ -80,7 +81,7 @@ fun updateTransitionData(expended: Boolean): AnimationData {
     val musicNoteRotate by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 360f,
-        animationSpec = InfiniteRepeatableSpec(
+        animationSpec = infiniteRepeatable(
             animation = tween(3000, easing = LinearEasing),
             repeatMode = RepeatMode.Restart
         )
@@ -89,7 +90,7 @@ fun updateTransitionData(expended: Boolean): AnimationData {
     val musicNoteScale by infiniteTransition.animateFloat(
         initialValue = if (expended) 1.1f else 1f,
         targetValue = if (expended) 0.5f else 1f,
-        animationSpec = InfiniteRepeatableSpec(
+        animationSpec = infiniteRepeatable(
             animation = tween(500),
             repeatMode = RepeatMode.Reverse
         )

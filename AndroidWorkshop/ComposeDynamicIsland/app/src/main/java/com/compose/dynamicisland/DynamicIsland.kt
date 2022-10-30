@@ -65,21 +65,19 @@ fun DynamicIsland(state: IslandType, modifier: Modifier = Modifier) {
                 )
             )
     ) {
-        if (state == IslandType.Small) InitialIsland()
-        else MediaPlayer(state.size, state != IslandType.Medium)
+        if (state == IslandType.Small) InitialIsland(Modifier.size(state.size))
+        else MediaPlayer(Modifier.size(state.size), state != IslandType.Medium)
     }
 }
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun MediaPlayer(size: DpSize, expended: Boolean = false) {
+private fun MediaPlayer(modifier: Modifier, expended: Boolean = false) {
 
     val animationData = updateTransitionData(expended)
 
     Box(
-        Modifier
-            .size(size)
-            .background(Color.Black)
+        modifier.background(Color.Black)
     ) {
 
         Column(
@@ -184,27 +182,27 @@ private fun PlayerController(modifier: Modifier) {
     }
 }
 
+
+@Composable
+fun InitialIsland(modifier: Modifier) {
+    Spacer( modifier.background(Color.Black))
+}
+
 @Preview
 @Composable
 fun PreviewExpendedMediaPlay() {
-    MediaPlayer(IslandType.Large.size, true)
+    MediaPlayer(Modifier.size(IslandType.Large.size), true)
 }
 
 @Preview
 @Composable
 fun PreviewCollapsedMediaPlay() {
-    MediaPlayer(IslandType.Medium.size, false)
+    MediaPlayer(Modifier.size(IslandType.Medium.size), false)
 }
+
 
 @Preview
 @Composable
-fun InitialIsland() {
-
-    Spacer(
-        Modifier
-            .size(IslandType.Small.size)
-            .background(Color.Black)
-    )
+fun PreviewInitialIsland() {
+    InitialIsland(Modifier.size(IslandType.Small.size))
 }
-
-
